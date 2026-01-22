@@ -18,3 +18,13 @@ C:\Users\Gabriel\Desktop\Calculadora\Calculadora\obj\Debug\Calculadora.csproj.Ge
 C:\Users\Gabriel\Desktop\Calculadora\Calculadora\obj\Debug\Calculadora.csproj.CoreCompileInputs.cache
 C:\Users\Gabriel\Desktop\Calculadora\Calculadora\obj\Debug\Calculadora.exe
 C:\Users\Gabriel\Desktop\Calculadora\Calculadora\obj\Debug\Calculadora.pdb
+C:\Users\Gabriel\Documents\Projetos\C#\Windows Forms\Calculadora\Calculadora\bin\Debug\Calculadora.exe.config
+C:\Users\Gabriel\Documents\Projetos\C#\Windows Forms\Calculadora\Calculadora\bin\Debug\Calculadora.exe
+C:\Users\Gabriel\Documents\Projetos\C#\Windows Forms\Calculadora\Calculadora\bin\Debug\Calculadora.pdb
+C:\Users\Gabriel\Documents\Projetos\C#\Windows Forms\Calculadora\Calculadora\obj\Debug\Calculadora.csproj.AssemblyReference.cache
+C:\Users\Gabriel\Documents\Projetos\C#\Windows Forms\Calculadora\Calculadora\obj\Debug\Calculadora.frmCalculadora.resources
+C:\Users\Gabriel\Documents\Projetos\C#\Windows Forms\Calculadora\Calculadora\obj\Debug\Calculadora.Properties.Resources.resources
+C:\Users\Gabriel\Documents\Projetos\C#\Windows Forms\Calculadora\Calculadora\obj\Debug\Calculadora.csproj.GenerateResource.cache
+C:\Users\Gabriel\Documents\Projetos\C#\Windows Forms\Calculadora\Calculadora\obj\Debug\Calculadora.csproj.CoreCompileInputs.cache
+C:\Users\Gabriel\Documents\Projetos\C#\Windows Forms\Calculadora\Calculadora\obj\Debug\Calculadora.exe
+C:\Users\Gabriel\Documents\Projetos\C#\Windows Forms\Calculadora\Calculadora\obj\Debug\Calculadora.pdb

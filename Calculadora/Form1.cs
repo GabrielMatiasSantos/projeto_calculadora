@@ -22,8 +22,8 @@ namespace Calculadora
         bool novoNumero = true;  //Informar se o número na tela pode ser sobreposto
         bool segundoNumero = false;  //Informar se o segundo valor de uma operação foi informado
         bool visorResultado = false;  //Informar se o visor estiver mostrando o resultado de uma operação com o botão de igual
-        bool visorResultado2 = false; //Informar se o visor estiver mostrando o resultado de uma operação com o botão de 1/x, raiz quadrada ou elevar a dois. Também é usado para indicar quando o botão de porcentagem é apertado
-        bool calculoInvalido = false; //Informar quando estiver exibindo a mensagem 'Cálculo inválido'
+        bool visorResultado2 = false; //Informar se o visor estiver mostrando o resultado de uma operação com o botão de 1/x, raiz quadrada ou elevar ao quadrado. Também é usado para indicar quando o botão de porcentagem é apertado
+        bool calculoInvalido = false; //Informar quando estiver exibindo uma mensagem de erro
 
 
         public frmCalculadora()
@@ -35,7 +35,7 @@ namespace Calculadora
         {
             if (novoNumero == true || visorResultado2 == true)                                          //A inserção de números é dividida em duas partes. A primeira consiste na inserção do primeiro digito do número  
             {
-                if (visorResultado == true || visorResultado2 == true)
+                if (visorResultado == true)
                 {
                     txtVisorCalculo.Clear();
                     visorResultado = false;
@@ -47,34 +47,31 @@ namespace Calculadora
                     calculoInvalido = false;
                 }
 
-                if (visorNumero != "0")
+              
+                if (visorResultado2 == true)           //Tratamento dos caracteres do visor de cálculo quando o número zero substitui o resultado de um cálculo relacionado à variável visorResultado2
                 {
-                    if (visorResultado2 == true)
+                    if (segundoNumero == false)
                     {
-                        if (segundoNumero == false)
-                        {
-                            txtVisorCalculo.Text = "0";
-                        }
-                        else
-                        {
-                            if (primeiroNumero.ToString().Contains(',') == false && primeiroNumero.ToString().Contains('-') == false && primeiroNumero.ToString().Length > 16 || primeiroNumero.ToString().Contains(',') == false && primeiroNumero.ToString().Contains('-') == true && primeiroNumero.ToString().Length > 17 || primeiroNumero.ToString().Contains(',') == true && primeiroNumero.ToString().Contains('-') == false && primeiroNumero.ToString().Length > 17 || primeiroNumero.ToString().Contains(',') == true && primeiroNumero.ToString().Contains('-') == true && primeiroNumero.ToString().Length > 18)
-                            {
-                                txtVisorCalculo.Text = primeiroNumero.ToString("e") + operacao + "0";
-                            }
-                            else
-                            {
-                                txtVisorCalculo.Text = primeiroNumero.ToString() + operacao + "0";
-                            }
-                        }
-
-                        visorResultado2 = false;
+                        txtVisorCalculo.Text = "0";
                     }
                     else
                     {
-                        txtVisorCalculo.Text += "0";
+                        if (primeiroNumero.ToString().Contains(',') == false && primeiroNumero.ToString().Contains('-') == false && primeiroNumero.ToString().Length > 16 || primeiroNumero.ToString().Contains(',') == false && primeiroNumero.ToString().Contains('-') == true && primeiroNumero.ToString().Length > 17 || primeiroNumero.ToString().Contains(',') == true && primeiroNumero.ToString().Contains('-') == false && primeiroNumero.ToString().Length > 17 || primeiroNumero.ToString().Contains(',') == true && primeiroNumero.ToString().Contains('-') == true && primeiroNumero.ToString().Length > 18)
+                        {
+                            txtVisorCalculo.Text = primeiroNumero.ToString("e") + operacao + "0";
+                        }
+                        else
+                        {
+                            txtVisorCalculo.Text = primeiroNumero.ToString() + operacao + "0";
+                        }
                     }
+
+                    visorResultado2 = false;
+                }                    
+                else if (txtVisorCalculo.Text != "0" && txtVisorCalculo.Text != "0" + operacao + "0")     //Tratamento dos caracteres do visor de cálculo para evitar á inserção de números zero indevidos
+                {
+                    txtVisorCalculo.Text += "0";
                 }
-               
 
                 txtVisor.Clear();
                 visorNumero = "0";
@@ -83,11 +80,6 @@ namespace Calculadora
                 if (operacao != "")                                //Quando um número é inserido depois de pressionar um botão de operação ele é tomado como o segundo número de um cálculo
                 {
                     segundoNumero = true;
-                }
-
-                if (novoNumero == false)
-                {
-                    novoNumero = true;
                 }
             }
             else if (visorNumero.Contains(',') == false && visorNumero.Contains('-') == false && visorNumero != "0" && visorNumero.Length <= 15 || visorNumero.Contains(',') == false && visorNumero.Contains('-') == true && visorNumero != "0" && visorNumero.Length <= 16 || visorNumero.Contains(',') == true && visorNumero.Contains('-') == false && parteInteira.Length + parteDecimal.Length <= 16 || visorNumero.Contains(',') == true && visorNumero.Contains('-') == true && parteInteira.Length + parteDecimal.Length <= 17)                      //A segunda parte consiste na inserção de mais digitos caso assim for desejado. Essa divisão no processo de inserção auxilia em duas situações.
@@ -111,7 +103,6 @@ namespace Calculadora
                     {                                                                                                      //Essa divisão ocorre pois a parte decimal com formatação faz com que algumas vezes a exibição da inserção de números zeros não ocorra pois eles podem ser interpretados como supérfluos
                         txtVisor.Text = Convert.ToDecimal(parteInteira).ToString("###,###") + ',' + parteDecimal;                                                                                      
                     }
-
                 }
                 else
                 {
@@ -138,7 +129,7 @@ namespace Calculadora
                 }
 
                        
-                if (visorNumero == "0" && txtVisorCalculo.Text.EndsWith("0"))                                         //Caso o número zero seja selecionado para ser um número de um cálculo, mas depois se queira substitui-lo por um outro número, ele é apagado do visor que mostra o cálculo 
+                if (visorNumero == "0" && txtVisorCalculo.Text.EndsWith("0"))                                         //Caso o número zero esteja selecionado para ser um número de um cálculo, mas depois se queira substitui-lo por um outro número, ele é apagado do visor que mostra o cálculo 
                 {
                     txtVisorCalculo.Text = txtVisorCalculo.Text.Remove(txtVisorCalculo.Text.Length - 1);
                     txtVisorCalculo.Text += "1";
@@ -868,7 +859,7 @@ namespace Calculadora
                 if (visorNumero == "0" && txtVisorCalculo.Text.EndsWith("0"))
                 {
                     txtVisorCalculo.Text = txtVisorCalculo.Text.Remove(txtVisorCalculo.Text.Length - 1);
-                    txtVisorCalculo.Text += "2";
+                    txtVisorCalculo.Text += "9";
                 }
                 else
                 {
@@ -942,9 +933,9 @@ namespace Calculadora
 
         private void btnVirgula_Click(object sender, EventArgs e)
         {
-            if (visorNumero.Contains(',') == false && visorNumero.Length <= 15)
+            if (visorNumero.Contains(',') == false && visorNumero.Length <= 15 && visorResultado2 == false)
             {
-                if (visorNumero == "")
+                if (visorNumero == "")        //Inserção da vírgula quando o número 0 for o número 0 inicial ou alcançado pelo uso do botão de backspace
                 {
                     visorNumero = "0,";
                     txtVisor.Text = visorNumero;
@@ -952,7 +943,7 @@ namespace Calculadora
 
                     novoNumero = false;
                 }
-                else if (visorNumero == "0" && visorResultado == false)
+                else if (visorNumero == "0" && visorResultado == false)    //Inserção da vírgula quando o número 0 for introduzido pelo botão número )
                 {
                     visorNumero += ',';
                     txtVisor.Text = visorNumero;
@@ -1003,7 +994,7 @@ namespace Calculadora
                 }
                 else if (visorResultado == true)                         //Caso se aperte um botão de operação quando o visor estiver mostrando o resultado de um cálculo, esse resultado será tomado como o primeiro número de um próximo cálculo
                 {
-                    if (visorNumero.Contains(',') == false && visorNumero.Length > 16 || visorNumero.Contains(',') == true && visorNumero.Length > 17)
+                    if (visorNumero.ToString().Contains(',') == false && visorNumero.ToString().Contains('-') == false && visorNumero.ToString().Length > 16 || visorNumero.ToString().Contains(',') == false && visorNumero.ToString().Contains('-') == true && primeiroNumero.ToString().Length > 17 || visorNumero.ToString().Contains(',') == true && visorNumero.ToString().Contains('-') == false && visorNumero.ToString().Length > 17 || visorNumero.ToString().Contains(',') == true && visorNumero.ToString().Contains('-') == true && visorNumero.ToString().Length > 18)
                     {
                         txtVisorCalculo.Text = Convert.ToDecimal(visorNumero).ToString("e") + "+";
                     }
@@ -1070,9 +1061,16 @@ namespace Calculadora
                             parteInteira = "";
                             parteDecimal = "";
                         }
-                        else
+                        else                           //Caso o número com vírgula seja resultado das operações 1/x, raiz quadrada, elevar ao quadrado ou porcentagem
                         {
-                            txtVisorCalculo.Text += "+";
+                            if (visorNumero.ToString().Contains('-') == false && visorNumero.ToString().Length > 17 || visorNumero.ToString().Contains('-') == true && visorNumero.ToString().Length > 18)
+                            {
+                                txtVisorCalculo.Text = Convert.ToDecimal(visorNumero).ToString("e") + "+";
+                            }
+                            else
+                            {
+                                txtVisorCalculo.Text += "+";
+                            }
                         }
                     } 
                     else                                                                            //Procedimento caso o número não tenha vírgula
@@ -1126,12 +1124,12 @@ namespace Calculadora
                         {
                             resultado = primeiroNumero + Convert.ToDecimal(visorNumero);
 
-                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == true && resultado.ToString().Length > 17)       //Todo resultado que gere números com mais de 16 dígitos é exibido na notação científica
+                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 18)       //Todo resultado que gere números com mais de 16 dígitos é exibido em notação científica
                             {
                                 txtVisor.Text = resultado.ToString("e");                  
                                 txtVisorCalculo.Text = resultado.ToString("e") + "+";
                             }
-                            else if (resultado < 1 && resultado > -1)                    //Resultados que comecem com o número zero é exibido sem formatação      
+                            else if (resultado < 1 && resultado > -1)                    //Resultados que comecem com o número zero sao exibidos sem formatação      
                             {
                                 txtVisor.Text = resultado.ToString();
                                 txtVisorCalculo.Text = resultado.ToString() + "+";
@@ -1160,7 +1158,7 @@ namespace Calculadora
                         {
                             resultado = primeiroNumero - Convert.ToDecimal(visorNumero);
 
-                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == true && resultado.ToString().Length > 17)
+                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 18)
                             {
                                 txtVisor.Text = resultado.ToString("e");
                                 txtVisorCalculo.Text = resultado.ToString("e") + "+";
@@ -1199,7 +1197,7 @@ namespace Calculadora
                                 resultado = Convert.ToDecimal(resultado.ToString().TrimEnd('0'));
                             }
 
-                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == true && resultado.ToString().Length > 17)
+                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 18)
                             {
                                 txtVisor.Text = resultado.ToString("e");
                                 txtVisorCalculo.Text = resultado.ToString("e") + "+";
@@ -1240,7 +1238,7 @@ namespace Calculadora
                             {
                                 resultado = primeiroNumero / Convert.ToDecimal(visorNumero);
 
-                                if (resultado.ToString().Contains(',') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == true && resultado.ToString().Length > 17)
+                                if (resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 18)
                                 {
                                     txtVisor.Text = resultado.ToString("e");
                                     txtVisorCalculo.Text = resultado.ToString("e") + "+";
@@ -1320,7 +1318,7 @@ namespace Calculadora
                 }
                 else if (visorResultado == true)                        
                 {
-                    if (visorNumero.Contains(',') == false && visorNumero.Length > 16 || visorNumero.Contains(',') == true && visorNumero.Length > 17)
+                    if (visorNumero.ToString().Contains(',') == false && visorNumero.ToString().Contains('-') == false && visorNumero.ToString().Length > 16 || visorNumero.ToString().Contains(',') == false && visorNumero.ToString().Contains('-') == true && primeiroNumero.ToString().Length > 17 || visorNumero.ToString().Contains(',') == true && visorNumero.ToString().Contains('-') == false && visorNumero.ToString().Length > 17 || visorNumero.ToString().Contains(',') == true && visorNumero.ToString().Contains('-') == true && visorNumero.ToString().Length > 18)
                     {
                         txtVisorCalculo.Text = Convert.ToDecimal(visorNumero).ToString("e") + "-";
                     }
@@ -1389,7 +1387,14 @@ namespace Calculadora
                         }
                         else
                         {
-                            txtVisorCalculo.Text += "-";
+                            if (visorNumero.ToString().Contains('-') == false && visorNumero.ToString().Length > 17 || visorNumero.ToString().Contains('-') == true && visorNumero.ToString().Length > 18)
+                            {
+                                txtVisorCalculo.Text = Convert.ToDecimal(visorNumero).ToString("e") + "-";
+                            }
+                            else
+                            {
+                                txtVisorCalculo.Text += "-";
+                            }
                         }
                     }
                     else                                                                            
@@ -1443,7 +1448,7 @@ namespace Calculadora
                         {
                             resultado = primeiroNumero + Convert.ToDecimal(visorNumero);
 
-                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == true && resultado.ToString().Length > 17)
+                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 18)
                             {
                                 txtVisor.Text = resultado.ToString("e");
                                 txtVisorCalculo.Text = resultado.ToString("e") + "-";
@@ -1477,7 +1482,7 @@ namespace Calculadora
                         {
                             resultado = primeiroNumero - Convert.ToDecimal(visorNumero);
 
-                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == true && resultado.ToString().Length > 17)
+                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 18)
                             {
                                 txtVisor.Text = resultado.ToString("e");
                                 txtVisorCalculo.Text = resultado.ToString("e") + "-";
@@ -1516,7 +1521,7 @@ namespace Calculadora
                                 resultado = Convert.ToDecimal(resultado.ToString().TrimEnd('0'));
                             }
 
-                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == true && resultado.ToString().Length > 17)
+                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 18)
                             {
                                 txtVisor.Text = resultado.ToString("e");
                                 txtVisorCalculo.Text = resultado.ToString("e") + "-";
@@ -1558,7 +1563,7 @@ namespace Calculadora
                             {
                                 resultado = primeiroNumero / Convert.ToDecimal(visorNumero);
 
-                                if (resultado.ToString().Contains(',') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == true && resultado.ToString().Length > 17)
+                                if (resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 18)
                                 {
                                     txtVisor.Text = resultado.ToString("e");
                                     txtVisorCalculo.Text = resultado.ToString("e") + "-";
@@ -1638,7 +1643,7 @@ namespace Calculadora
                 }
                 else if (visorResultado == true)
                 {
-                    if (visorNumero.Contains(',') == false && visorNumero.Length > 16 || visorNumero.Contains(',') == true && visorNumero.Length > 17)
+                    if (visorNumero.ToString().Contains(',') == false && visorNumero.ToString().Contains('-') == false && visorNumero.ToString().Length > 16 || visorNumero.ToString().Contains(',') == false && visorNumero.ToString().Contains('-') == true && primeiroNumero.ToString().Length > 17 || visorNumero.ToString().Contains(',') == true && visorNumero.ToString().Contains('-') == false && visorNumero.ToString().Length > 17 || visorNumero.ToString().Contains(',') == true && visorNumero.ToString().Contains('-') == true && visorNumero.ToString().Length > 18)
                     {
                         txtVisorCalculo.Text = Convert.ToDecimal(visorNumero).ToString("e") + "x";
                     }
@@ -1707,7 +1712,14 @@ namespace Calculadora
                         }
                         else
                         {
-                            txtVisorCalculo.Text += "x";
+                            if (visorNumero.ToString().Contains('-') == false && visorNumero.ToString().Length > 17 || visorNumero.ToString().Contains('-') == true && visorNumero.ToString().Length > 18)
+                            {
+                                txtVisorCalculo.Text = Convert.ToDecimal(visorNumero).ToString("e") + "x";
+                            }
+                            else
+                            {
+                                txtVisorCalculo.Text += "x";
+                            }
                         }
                     }
                     else
@@ -1761,7 +1773,7 @@ namespace Calculadora
                         {
                             resultado = primeiroNumero + Convert.ToDecimal(visorNumero);
 
-                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == true && resultado.ToString().Length > 17)
+                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 18)
                             {
                                 txtVisor.Text = resultado.ToString("e");
                                 txtVisorCalculo.Text = resultado.ToString("e") + "x";
@@ -1795,7 +1807,7 @@ namespace Calculadora
                         {
                             resultado = primeiroNumero - Convert.ToDecimal(visorNumero);
 
-                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == true && resultado.ToString().Length > 17)
+                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 18)
                             {
                                 txtVisor.Text = resultado.ToString("e");
                                 txtVisorCalculo.Text = resultado.ToString("e") + "x";
@@ -1834,7 +1846,7 @@ namespace Calculadora
                                 resultado = Convert.ToDecimal(resultado.ToString().TrimEnd('0'));
                             }
 
-                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == true && resultado.ToString().Length > 17)
+                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 18)
                             {
                                 txtVisor.Text = resultado.ToString("e");
                                 txtVisorCalculo.Text = resultado.ToString("e") + "x";
@@ -1876,7 +1888,7 @@ namespace Calculadora
                             {
                                 resultado = primeiroNumero / Convert.ToDecimal(visorNumero);
 
-                                if (resultado.ToString().Contains(',') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == true && resultado.ToString().Length > 17)
+                                if (resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 18)
                                 {
                                     txtVisor.Text = resultado.ToString("e");
                                     txtVisorCalculo.Text = resultado.ToString("e") + "x";
@@ -1956,7 +1968,7 @@ namespace Calculadora
                 }
                 else if (visorResultado == true)
                 {
-                    if (visorNumero.Contains(',') == false && visorNumero.Length > 16 || visorNumero.Contains(',') == true && visorNumero.Length > 17)
+                    if (visorNumero.ToString().Contains(',') == false && visorNumero.ToString().Contains('-') == false && visorNumero.ToString().Length > 16 || visorNumero.ToString().Contains(',') == false && visorNumero.ToString().Contains('-') == true && primeiroNumero.ToString().Length > 17 || visorNumero.ToString().Contains(',') == true && visorNumero.ToString().Contains('-') == false && visorNumero.ToString().Length > 17 || visorNumero.ToString().Contains(',') == true && visorNumero.ToString().Contains('-') == true && visorNumero.ToString().Length > 18)
                     {
                         txtVisorCalculo.Text = Convert.ToDecimal(visorNumero).ToString("e") + "/";
                     }
@@ -2025,7 +2037,14 @@ namespace Calculadora
                         }
                         else
                         {
-                            txtVisorCalculo.Text += "/";
+                            if (visorNumero.ToString().Contains('-') == false && visorNumero.ToString().Length > 17 || visorNumero.ToString().Contains('-') == true && visorNumero.ToString().Length > 18)
+                            {
+                                txtVisorCalculo.Text = Convert.ToDecimal(visorNumero).ToString("e") + "/";
+                            }
+                            else
+                            {
+                                txtVisorCalculo.Text += "/";
+                            }
                         }
                     }
                     else
@@ -2079,7 +2098,7 @@ namespace Calculadora
                         {
                             resultado = primeiroNumero + Convert.ToDecimal(visorNumero);
 
-                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == true && resultado.ToString().Length > 17)
+                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 18)
                             {
                                 txtVisor.Text = resultado.ToString("e");
                                 txtVisorCalculo.Text = resultado.ToString("e") + "/";
@@ -2113,7 +2132,7 @@ namespace Calculadora
                         {
                             resultado = primeiroNumero - Convert.ToDecimal(visorNumero);
 
-                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == true && resultado.ToString().Length > 17)
+                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 18)
                             {
                                 txtVisor.Text = resultado.ToString("e");
                                 txtVisorCalculo.Text = resultado.ToString("e") + "/";
@@ -2152,7 +2171,7 @@ namespace Calculadora
                                 resultado = Convert.ToDecimal(resultado.ToString().TrimEnd('0'));
                             }
 
-                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == true && resultado.ToString().Length > 17)
+                            if (resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 18)
                             {
                                 txtVisor.Text = resultado.ToString("e");
                                 txtVisorCalculo.Text = resultado.ToString("e") + "/";
@@ -2194,7 +2213,7 @@ namespace Calculadora
                             {
                                 resultado = primeiroNumero / Convert.ToDecimal(visorNumero);
 
-                                if (resultado.ToString().Contains(',') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == true && resultado.ToString().Length > 17)
+                                if (resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 16 || resultado.ToString().Contains(',') == false && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == false && resultado.ToString().Length > 17 || resultado.ToString().Contains(',') == true && resultado.ToString().Contains('-') == true && resultado.ToString().Length > 18)
                                 {
                                     txtVisor.Text = resultado.ToString("e");
                                     txtVisorCalculo.Text = resultado.ToString("e") + "/";
@@ -2452,7 +2471,7 @@ namespace Calculadora
             }
         }
 
-        private void btnElevado_Click(object sender, EventArgs e)           // Elevar a 2 o número do visor
+        private void btnElevado_Click(object sender, EventArgs e)           // Elevar aao quadrado o número do visor
         {
             if (novoNumero == true && visorNumero == "")             //Procedimento caso se aperte o botão sobre o número zero inicial ou o número zero alcançado pelo backspace
             {
@@ -2928,7 +2947,6 @@ namespace Calculadora
                         }
                         else
                         {
-
                             txtVisorCalculo.Text = primeiroNumero.ToString() + operacao + visorNumero + "=";
                         }    
                     }
@@ -3169,7 +3187,7 @@ namespace Calculadora
 
                         txtVisorCalculo.Text = visorNumero;
                     }
-                    else if (visorNumero.Contains(',') == true && parteInteira != "")        //Procedimento de quando o número informado pelos botões de números tiver vírgula
+                    else if (visorNumero.Contains(',') == true && parteInteira != "")        //Procedimento de quando se aperta o botão em número com vírgula e casa decimal
                     {
                         if (parteInteira.Contains('-') == false)
                         {
@@ -3481,7 +3499,7 @@ namespace Calculadora
                     }
                     else
                     {
-                        txtVisor.Text = Convert.ToDecimal(parteInteira).ToString("###,###.###############") + parteDecimal;
+                        txtVisor.Text = Convert.ToDecimal(parteInteira).ToString("###,###.###############") + ',' + parteDecimal;
                     }
 
                     if (parteDecimal == "")
@@ -3493,11 +3511,36 @@ namespace Calculadora
                 {
                     visorNumero = visorNumero.Remove(visorNumero.Length - 1);
 
-                   if ( visorNumero == "")
+                    if ( visorNumero == "")       //Quando se apaga todos os números do visor este deve exibir o número zero
                     {
                         txtVisor.Text = "0";
 
                         novoNumero = true;
+                    }
+                    else if (visorNumero == "-")         //Quando se usa o backspace sobre um número negativo de apenas um dígito, deve-se apagar não só o número mas também o sinal de negativo do visor de cálculo
+                    {
+                        txtVisor.Text = "0";
+
+                        novoNumero = true;
+                        visorNumero = "";
+
+                        txtVisorCalculo.Text = txtVisorCalculo.Text.Remove(txtVisorCalculo.Text.Length - 1);
+                    }
+                    else if (visorNumero == "-0")     //Caso se uso o backspace em um número negativo com casa decimal em que parte inteira seja o número zero, caso o usuário remova a vírgula será removido o sinal de negativo
+                    {
+                        novoNumero = true;
+                        visorNumero = "0";
+
+                        txtVisor.Text = visorNumero;
+
+                        if (segundoNumero == false)
+                        {
+                            txtVisorCalculo.Text = txtVisorCalculo.Text.Remove(0, 1);
+                        }
+                        else
+                        {
+                            txtVisorCalculo.Text = txtVisorCalculo.Text.Remove(txtVisorCalculo.Text.LastIndexOf('-'), 1);
+                        }
                     }
                     else if (visorNumero.StartsWith("0") || visorNumero.StartsWith("-0"))
                     {
