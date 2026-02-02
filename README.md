@@ -106,7 +106,7 @@
      -Se a operação do cálculo for adição ou subtração, o novo segundo número será ele divido por 100 e depois multiplicado pelo primeiro número
 
 
-   .O botão de limpeza (C) retorna a cálculadora ao estado inicial
+   .O botão de limpeza (C) retorna a calculadora ao estado inicial
 
    .A variável 'calculoInvalido' faz com que ao ocorrer um cálculo inválido os únicos botões que o usuário possa usar são os numéricos (o número irá sobrepor a mensagem de erro e se iniciará um novo         cálculo) ou o botão de limpeza (retornar a calculadora ao seu estado inicial)
 
